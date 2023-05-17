@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+
+set -eu
+
+ROOT_DIR=$(CDPATH="" cd -- "$(dirname -- "$0")" && pwd)
+
+cd "${ROOT_DIR}"
+
+apk add --no-cache --virtual .curl curl
+
+NGINX_QUIC_VERSION_URL="https://hg.nginx.org/nginx-quic/raw-file/tip/src/core/nginx.h"
+export NGINX_VERSION="$(
+    curl \
+        --silent \
+        --fail "${NGINX_QUIC_VERSION_URL}" |
+        sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
+)"
+
+apk del .curl
+
+export RELEASE=1
+export APK_ARCH="$(cat /etc/apk/arch)"
+export PKG_OSS_STEM="pkg-oss-${NGINX_VERSION}-${RELEASE}"
+export PKG_OSS_TARBALL="${PKG_OSS_STEM}.tar.gz"
+export DEPS_DIR="/tmp/deps"
+export BUILD_DIR="$(mktemp -d)"
+
+for file in $(ls | grep -v "^00"); do
+    ./"${file}"
+done

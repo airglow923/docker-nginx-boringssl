@@ -1,0 +1,10 @@
+gcc
+libc-dev
+make
+openssl-dev
+pcre2-dev
+zlib-dev
+linux-headers
+bash
+alpine-sdk
+findutils

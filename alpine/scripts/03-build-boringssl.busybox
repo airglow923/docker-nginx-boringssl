@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+set -eu
+
+cd "${BUILD_DIR}"
+
+git clone https://github.com/google/boringssl
+
+cd boringssl
+
+cmake -GNinja -B build .
+cmake --build build

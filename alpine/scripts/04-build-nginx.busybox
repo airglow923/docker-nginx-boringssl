@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+
+set -eu
+
+cd "${BUILD_DIR}"
+
+curl -o "${PKG_OSS_TARBALL}" -fS "https://hg.nginx.org/pkg-oss/archive/${NGINX_VERSION}-${RELEASE}.tar.gz"
+
+tar -xf "${PKG_OSS_TARBALL}"
+
+cd "${PKG_OSS_STEM}/alpine"
+
+sed -i 's/\(\s*--with-stream_ssl_preread_module\)/\1 \\/' Makefile
+
+# enable HTTP/3 and QUIC
+sed -i \
+    '/--with-stream_ssl_preread_module/a \
+    --with-http_v3_module \\\
+    --with-stream_quic_module \\\
+    --with-cc-opt="-I $(BORINGSSL_DIR)/include" \\\
+    --with-ld-opt="-L $(BORINGSSL_DIR)/build/ssl -L $(BORINGSSL_DIR)/build/crypto"' \
+    Makefile
+
+# fetch NGINX QUIC branch
+sed -i \
+    '/prepare() {/a \
+    [ ! -d "/tmp/nginx-quic" ] && hg clone -b quic https://hg.nginx.org/nginx-quic /tmp/nginx-quic\
+    rsync -r /tmp/nginx-quic/ "$builddir"' \
+    APKBUILD-base.in
+
+# suppress 127 error
+sed -i \
+    '/make \$_make_opts/i \
+    touch "${BORINGSSL_DIR}/include/openssl/ssl.h"' \
+    APKBUILD-base.in
+
+chown -R nobody:nobody "${BUILD_DIR}"
+
+su nobody -s /bin/ash -c " \
+    export HOME=\"${BUILD_DIR}\" \
+    && export BORINGSSL_DIR=\"${BUILD_DIR}/boringssl\" \
+    && make base \
+    && apk index \
+        -o \"${BUILD_DIR}/packages/alpine/${APK_ARCH}/APKINDEX.tar.gz\" \
+        \"${BUILD_DIR}/packages/alpine/${APK_ARCH}\"/*.apk \
+    && abuild-sign \
+        -k \"${BUILD_DIR}/.abuild/abuild-key.rsa\" \
+        \"${BUILD_DIR}/packages/alpine/${APK_ARCH}/APKINDEX.tar.gz\""
+
+cp "${BUILD_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys

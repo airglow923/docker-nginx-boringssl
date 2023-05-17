@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+set -eu
+
+apk del $(ls -A "${DEPS_DIR}" | grep "^\.")
