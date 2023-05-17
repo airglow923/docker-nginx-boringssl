@@ -24,7 +24,7 @@ sed -i \
 # fetch NGINX QUIC branch
 sed -i \
     '/prepare() {/a \
-    [ ! -d "/tmp/nginx-quic" ] && hg clone -b quic https://hg.nginx.org/nginx-quic /tmp/nginx-quic\
+    [ ! -d "/tmp/nginx-quic" ] && hg clone -b quic https://hg.nginx.org/nginx-quic /tmp/nginx-quic \
     rsync -r /tmp/nginx-quic/ "$builddir"' \
     APKBUILD-base.in
 
