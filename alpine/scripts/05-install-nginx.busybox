@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-set -eu
-
-apk add -X "${BUILD_DIR}/packages/alpine/" --no-cache "nginx=${NGINX_VERSION}-r${RELEASE}"
