@@ -16,7 +16,9 @@ COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d /docker-entrypoint.d
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 80
+EXPOSE 80/tcp
+EXPOSE 443/tcp
+EXPOSE 443/udp
 
 STOPSIGNAL SIGQUIT
 
