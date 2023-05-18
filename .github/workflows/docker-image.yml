@@ -24,9 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build the Docker image
-        working-directory: ./alpine
-        run: ./build-docker.sh
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
