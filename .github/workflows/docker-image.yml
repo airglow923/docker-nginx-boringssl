@@ -5,10 +5,12 @@ on:
     branches: ["main"]
     paths:
       - "alpine/**"
+      - ".github/workflows/**"
   pull_request:
     branches: ["main"]
     paths:
       - "alpine/**"
+      - ".github/workflows/**"
   schedule:
     - cron: 0 0 * * 0
 
