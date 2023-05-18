@@ -45,10 +45,17 @@ jobs:
           )"
           echo "NGINX_VERSION=${NGINX_VERSION}" >> $GITHUB_OUTPUT
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl:latest
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: ./alpine
-          tags: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl:latest
-          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
