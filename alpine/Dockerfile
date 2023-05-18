@@ -27,7 +27,7 @@ RUN apk add --no-cache --virtual .nginx-deps \
     rsync \
     zlib-dev
 
-RUN set -x \
+RUN set -eux \
     && apk add --no-cache --virtual .gettext gettext \
     && mv /usr/bin/envsubst /tmp \
     && ENVSUBST_DEPENDENCIES="$( \
@@ -55,14 +55,14 @@ RUN git clone https://github.com/google/boringssl "${TMP_DIR}/boringssl"
 RUN cmake -GNinja -B "${TMP_DIR}/boringssl/build" "${TMP_DIR}/boringssl"
 RUN cmake --build "${TMP_DIR}/boringssl/build"
 
-RUN set -x \
+RUN set -eux \
     && PKG_OSS_TARBALL="pkg-oss-${NGINX_VERSION}-${RELEASE}.tar.gz" \
     && cd "${TMP_DIR}" \
     && curl -o "${PKG_OSS_TARBALL}" \
         -fS "https://hg.nginx.org/pkg-oss/archive/${NGINX_VERSION}-${RELEASE}.tar.gz" \
     && tar -xf "${PKG_OSS_TARBALL}"
 
-RUN set -x \
+RUN set -eux \
     && cd "${TMP_DIR}"/pkg-oss-*/alpine \
     && sed -i 's/\(\s*--with-stream_ssl_preread_module\)/\1 \\/' Makefile \
     && sed -i \
@@ -86,7 +86,7 @@ RUN chown nobody:nobody "${TMP_DIR}"
 RUN chown -R nobody:nobody "${TMP_DIR}"/boringssl/include
 RUN chown -R nobody:nobody "${TMP_DIR}"/pkg-oss-*
 
-RUN set -x \
+RUN set -eux \
     && export APK_ARCH="$(cat /etc/apk/arch)" \
     && export BORINGSSL_DIR="${TMP_DIR}/boringssl" \
     && su nobody -s /bin/sh -c " \
