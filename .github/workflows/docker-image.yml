@@ -2,18 +2,16 @@ name: Docker Image CI - Alpine
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      working-directory: ${{runner.workspace}}/alpine
-      run: ./build-docker.sh
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        working-directory: ./alpine
+        run: ./build-docker.sh
