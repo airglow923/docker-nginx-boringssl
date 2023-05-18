@@ -27,3 +27,31 @@ jobs:
       - name: Build the Docker image
         working-directory: ./alpine
         run: ./build-docker.sh
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PRIVATE }}
+
+      - name: Get NGINX version
+        id: get-nginx-version
+        run: |
+          NGINX_VERSION="$(
+              curl \
+                  --silent \
+                  --fail https://hg.nginx.org/nginx-quic/raw-file/tip/src/core/nginx.h |
+                  sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
+          )"
+          echo "NGINX_VERSION=${NGINX_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          build-args: NGINX_VERSION="${{ steps.get-nginx-version.outputs.NGINX_VERSION }}"
+          context: ./alpine
+          tags: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl:latest
+          push: true
