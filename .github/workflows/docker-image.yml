@@ -49,7 +49,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl:latest
+          images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl
 
       - name: Build and push
         uses: docker/build-push-action@v4
