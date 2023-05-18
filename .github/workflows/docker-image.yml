@@ -48,7 +48,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          build-args: NGINX_VERSION="${{ steps.get-nginx-version.outputs.NGINX_VERSION }}"
+          build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: ./alpine
           tags: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl:latest
           push: true
