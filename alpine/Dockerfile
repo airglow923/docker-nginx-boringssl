@@ -68,7 +68,6 @@ RUN set -eux \
     && sed -i \
         '/--with-stream_ssl_preread_module/a \ \
         --with-http_v3_module \\\n \
-        --with-stream_quic_module \\\n \
         --with-cc-opt="-I $(BORINGSSL_DIR)/include" \\\n \
         --with-ld-opt="-L $(BORINGSSL_DIR)/build/ssl -L $(BORINGSSL_DIR)/build/crypto"' \
         Makefile \
