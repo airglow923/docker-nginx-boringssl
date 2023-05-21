@@ -15,4 +15,4 @@ NGINX_VERSION="$(
         sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
 )"
 
-docker build -t "${TAG}" --build-arg NGINX_VERSION="${NGINX_VERSION}" .
+docker build -t "${TAG}" --progress=plain --build-arg NGINX_VERSION="${NGINX_VERSION}" .
