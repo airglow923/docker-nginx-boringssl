@@ -38,10 +38,14 @@ jobs:
         id: get-nginx-version
         run: |
           NGINX_VERSION="$(
-              curl \
-                  --silent \
-                  --fail https://hg.nginx.org/nginx-quic/raw-file/quic/src/core/nginx.h |
-                  sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
+            curl \
+                --fail \
+                --proto '=https' \
+                --show-error \
+                --silent \
+                --tlsv1.2 \
+                https://hg.nginx.org/nginx/raw-file/default/src/core/nginx.h |
+                sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
           )"
           echo "NGINX_VERSION=${NGINX_VERSION}" >> $GITHUB_OUTPUT
 
