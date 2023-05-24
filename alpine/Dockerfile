@@ -67,15 +67,9 @@ RUN set -eux \
     && sed -i 's/\(\s*--with-stream_ssl_preread_module\)/\1 \\/' Makefile \
     && sed -i \
         '/--with-stream_ssl_preread_module/a \ \
-        --with-http_v3_module \\\n \
         --with-cc-opt="-I $(BORINGSSL_DIR)/include" \\\n \
         --with-ld-opt="-L $(BORINGSSL_DIR)/build/ssl -L $(BORINGSSL_DIR)/build/crypto"' \
         Makefile \
-    && sed -i \
-        '/prepare() {/a \ \
-        hg clone -b quic https://hg.nginx.org/nginx-quic "${TMP_DIR}/nginx-quic" \n \
-        rsync -r "${TMP_DIR}/nginx-quic/" "$builddir"' \
-        APKBUILD-base.in \
     && sed -i \
         '/make \$_make_opts/i \ \
         touch "${BORINGSSL_DIR}/include/openssl/ssl.h"' \

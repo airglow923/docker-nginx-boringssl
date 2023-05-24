@@ -11,7 +11,8 @@ cd "${ROOT_DIR}"
 NGINX_VERSION="$(
     curl \
         --silent \
-        --fail https://hg.nginx.org/nginx-quic/raw-file/quic/src/core/nginx.h |
+        --fail \
+        https://hg.nginx.org/nginx/raw-file/default/src/core/nginx.h |
         sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
 )"
 
