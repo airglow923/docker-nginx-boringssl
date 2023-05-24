@@ -18,13 +18,11 @@ RUN apk add --no-cache --virtual .nginx-deps \
     libc-dev \
     linux-headers \
     make \
-    mercurial \
     ninja \
     openssl \
     openssl-dev \
     pcre2-dev \
     perl \
-    rsync \
     zlib-dev
 
 RUN set -eux \
