@@ -37,16 +37,17 @@ jobs:
       - name: Get NGINX version
         id: get-nginx-version
         run: |
-          NGINX_VERSION="$(
-            curl \
-                --fail \
-                --proto '=https' \
-                --show-error \
-                --silent \
-                --tlsv1.2 \
-                https://hg.nginx.org/nginx/raw-file/default/src/core/nginx.h |
-                sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
-          )"
+          # NGINX_VERSION="$(
+          #   curl \
+          #       --fail \
+          #       --proto '=https' \
+          #       --show-error \
+          #       --silent \
+          #       --tlsv1.2 \
+          #       https://hg.nginx.org/nginx/raw-file/default/src/core/nginx.h |
+          #       sed -n 's/#define NGINX_VERSION\s*"\(.*\)"/\1/p'
+          # )"
+          NGINX_VERSION=1.25.0
           echo "NGINX_VERSION=${NGINX_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Docker meta
