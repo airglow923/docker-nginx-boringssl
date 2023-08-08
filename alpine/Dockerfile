@@ -53,6 +53,7 @@ RUN git clone https://github.com/google/boringssl "${TMP_DIR}/boringssl"
 RUN cmake -GNinja -B "${TMP_DIR}/boringssl/build" "${TMP_DIR}/boringssl"
 RUN cmake --build "${TMP_DIR}/boringssl/build"
 
+# alpine-sdk depends on abuild that depends on curl
 RUN set -eux \
     && PKG_OSS_TARBALL="pkg-oss-${NGINX_VERSION}-${RELEASE}.tar.gz" \
     && cd "${TMP_DIR}" \
