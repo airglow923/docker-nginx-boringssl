@@ -17,8 +17,6 @@ cleanup() {
 
 mkdir -p /usr/local/sbin
 
-apk add --no-cache curl
-
 # `alpine-sdk` depends on `abuild` that depends on `curl`
 curl -sSf --tlsv1.2 --proto '=https' -L \
     "https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker" \
