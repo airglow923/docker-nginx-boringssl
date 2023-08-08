@@ -109,8 +109,8 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 RUN mkdir -p /docker-entrypoint.d
 
-COPY ../docker-entrypoint.sh /
-COPY ../docker-entrypoint.d /docker-entrypoint.d
+COPY docker-entrypoint.sh /
+COPY docker-entrypoint.d /docker-entrypoint.d
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80/tcp

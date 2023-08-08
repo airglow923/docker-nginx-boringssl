@@ -57,8 +57,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
-          context: ./alpine
-          labels: ${{ steps.meta.outputs.labels }}
           push: ${{ github.event_name != 'pull_request' }}
+          build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
+          context: .
+          file: ./alpine/Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
