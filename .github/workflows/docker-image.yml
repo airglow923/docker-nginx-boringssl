@@ -4,12 +4,16 @@ on:
   push:
     branches: ["main"]
     paths:
+      - "*.sh"
       - "alpine/**"
+      - "docker-entrypoint.d"
       - ".github/workflows/**"
   pull_request:
     branches: ["main"]
     paths:
+      - "*.sh"
       - "alpine/**"
+      - "docker-entrypoint.d"
       - ".github/workflows/**"
   schedule:
     - cron: 0 0 * * *
