@@ -67,7 +67,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: .
-          file: ${{ matrix.dockefile }}
+          file: ${{ matrix.dockerfile }}
           tags: >-
             ${{
               format('{0}{1}',
