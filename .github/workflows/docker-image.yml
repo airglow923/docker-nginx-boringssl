@@ -65,7 +65,7 @@ jobs:
           images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl
           tags: |
             type=raw,value=latest,enable=${{
-              !endsWith(matrix.dockerfile, 'ngxblocker'))
+              !endsWith(matrix.dockerfile, 'ngxblocker')
             }}
             ${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
 
