@@ -67,7 +67,7 @@ jobs:
             latest=true
             suffix=${{
               endsWith(matrix.dockerfile, 'ngxblocker') && '-ngxblocker' || '')
-            }}
+            }},onlatest=true
           tags: |
             type=raw,value=latest
             type=raw,value=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
