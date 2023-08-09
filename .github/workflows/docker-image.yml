@@ -67,7 +67,12 @@ jobs:
             type=raw,value=latest,enable=${{
               !endsWith(matrix.dockerfile, 'ngxblocker')
             }}
-            ${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
+            type=raw,value=${{
+              format('{0}{1}',
+                steps.get-nginx-version.outputs.NGINX_VERSION,
+                endsWith(matrix.dockerfile, 'ngxblocker')
+                  && '-ngxblocker' || '')
+            }}
 
       - name: Build and push
         uses: docker/build-push-action@v4
