@@ -36,7 +36,7 @@ RUN set -eux \
             sort -u \
     )" \
     && apk add --no-cache $ENVSUBST_DEPENDENCIES \
-    && apk del .gettext \
+    && apk del --no-network .gettext \
     && mv /tmp/envsubst /usr/local/bin
 
 RUN apk add --no-cache tzdata
@@ -99,7 +99,7 @@ RUN apk add \
     -X "${TMP_DIR}/packages/alpine" \
     --no-cache "nginx=${NGINX_VERSION}-r${RELEASE}"
 
-RUN apk del .nginx-deps
+RUN apk del --no-network .nginx-deps
 
 RUN [ -n "${TMP_DIR}" ] && rm -rf "${TMP_DIR}"
 RUN [ -n "/etc/apk/keys/abuild-key.rsa.pub" ] && rm -f /etc/apk/keys/abuild-key.rsa.pub
