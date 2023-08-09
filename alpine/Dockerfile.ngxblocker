@@ -1,4 +1,5 @@
-FROM airglow923/nginx-boringssl:latest
+ARG NGINX_VERSION
+FROM airglow923/nginx-boringssl:${NGINX_VERSION}
 
 LABEL maintainer="Hyundeok Park <p.hyundeok76@gmail.com>"
 

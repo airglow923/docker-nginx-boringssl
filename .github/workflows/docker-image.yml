@@ -64,15 +64,8 @@ jobs:
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl
           tags: |
-            type=raw,value=latest,enable=${{
-              !endsWith(matrix.dockerfile, 'ngxblocker')
-            }}
-            type=raw,value=${{
-              format('{0}{1}',
-                steps.get-nginx-version.outputs.NGINX_VERSION,
-                endsWith(matrix.dockerfile, 'ngxblocker')
-                  && '-ngxblocker' || '')
-            }}
+            type=raw,value=latest
+            type=raw,value=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
 
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -81,5 +74,11 @@ jobs:
           build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: >-
+            ${{
+              format('{0}{1}',
+                steps.meta.outputs.tags,
+                endsWith(matrix.dockerfile, 'ngxblocker')
+                  && '-ngxblocker' || '')
+            }}
           labels: ${{ steps.meta.outputs.labels }}
