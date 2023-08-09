@@ -27,7 +27,7 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       max-parallel: 1
       matrix:
         include:
@@ -63,6 +63,11 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl
+          flavor: |
+            latest=true
+            suffix=${{
+              endsWith(matrix.dockerfile, 'ngxblocker') && '-ngxblocker' || '')
+            }}
           tags: |
             type=raw,value=latest
             type=raw,value=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
@@ -74,11 +79,5 @@ jobs:
           build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: >-
-            ${{
-              format('{0}{1}',
-                steps.meta.outputs.tags,
-                endsWith(matrix.dockerfile, 'ngxblocker')
-                  && '-ngxblocker' || '')
-            }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
