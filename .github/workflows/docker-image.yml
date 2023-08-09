@@ -63,7 +63,11 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/nginx-boringssl
-          tags: ${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
+          tags: |
+            type=raw,value=latest,enable=${{
+              !endsWith(matrix.dockerfile, 'ngxblocker'))
+            }}
+            ${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
 
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -72,11 +76,5 @@ jobs:
           build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: >-
-            ${{
-              format('{0}{1}',
-                steps.meta.outputs.tags,
-                endsWith(matrix.dockerfile, 'ngxblocker')
-                  && '-ngxblocker' || '')
-            }}
+          tags: steps.meta.outputs.tags
           labels: ${{ steps.meta.outputs.labels }}
