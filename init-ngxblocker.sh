@@ -2,17 +2,9 @@
 
 set -eu
 
-trap cleanup INT TERM EXIT
-
 NGXBLOCKER_INSTALL_SCRIPT="/usr/local/sbin/install-ngxblocker"
 NGXBLOCKER_SETUP_SCRIPT="/usr/local/sbin/setup-ngxblocker"
 NGXBLOCKER_UPDATE_SCRIPT="/usr/local/sbin/update-ngxblocker"
-
-cleanup() {
-    trap - INT TERM EXIT
-
-    rm -f "$NGXBLOCKER_INSTALL_SCRIPT"
-}
 
 mkdir -p /usr/local/sbin
 
