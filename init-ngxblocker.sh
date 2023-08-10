@@ -12,7 +12,6 @@ cleanup() {
     trap - INT TERM EXIT
 
     rm -f "$NGXBLOCKER_INSTALL_SCRIPT"
-    rm -f "$NGXBLOCKER_SETUP_SCRIPT"
 }
 
 mkdir -p /usr/local/sbin

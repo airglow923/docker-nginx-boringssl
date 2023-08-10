@@ -5,8 +5,7 @@ LABEL maintainer="Hyundeok Park <p.hyundeok76@gmail.com>"
 
 COPY init-ngxblocker.sh /tmp
 
-RUN apk add --no-cache curl
-# ngxblocker depends on dig
-RUN apk add bind-tools
+# curl: required by update-ngxblocker
+# dig: optional dependency of scripts.d
+RUN apk add --no-cache curl bind-tools
 RUN /tmp/init-ngxblocker.sh
-RUN apk del curl
