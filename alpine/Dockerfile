@@ -73,7 +73,7 @@ RUN set -eux \
     && sed -i \
         '/make \$_make_opts/i \ \
         touch "${BORINGSSL_DIR}/include/openssl/ssl.h"' \
-        APKBUILD-base.in
+        alpine/APKBUILD-base.in
 
 RUN chown nobody:nobody "${TMP_DIR}"
 RUN chown -R nobody:nobody "${TMP_DIR}"/boringssl/include
