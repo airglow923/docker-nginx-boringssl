@@ -46,6 +46,19 @@ RUN cmake -GNinja -B "${TMP_DIR}/boringssl/build" "${TMP_DIR}/boringssl"
 RUN cmake --build "${TMP_DIR}/boringssl/build"
 RUN apk del --no-network .build-deps-boringssl
 
+RUN apk add --no-cache --virtual .build-deps-nginx \
+    alpine-sdk \
+    bash \
+    curl \
+    findutils \
+    gcc \
+    libc-dev \
+    linux-headers \
+    make \
+    openssl-dev \
+    pcre2-dev \
+    zlib-dev
+
 # alpine-sdk depends on abuild that depends on curl
 RUN set -eux \
     && PKG_OSS_TARBALL="pkg-oss-${NGINX_VERSION}-${RELEASE}.tar.gz" \
@@ -71,18 +84,6 @@ RUN set -eux \
 RUN chown nobody:nobody "${TMP_DIR}"
 RUN chown -R nobody:nobody "${TMP_DIR}"/boringssl/include
 RUN chown -R nobody:nobody "${TMP_DIR}"/pkg-oss-*
-
-RUN apk add --no-cache --virtual .build-deps-nginx \
-    alpine-sdk \
-    bash \
-    findutils \
-    gcc \
-    libc-dev \
-    linux-headers \
-    make \
-    openssl-dev \
-    pcre2-dev \
-    zlib-dev
 
 RUN set -eux \
     && export APK_ARCH="$(cat /etc/apk/arch)" \
