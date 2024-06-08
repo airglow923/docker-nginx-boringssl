@@ -10,6 +10,7 @@ ENV TMP_DIR /tmp/docker-nginx-boringssl
 RUN apk add --no-cache --virtual .nginx-deps \
     alpine-sdk \
     bash \
+    ca-certificates \
     cmake \
     curl \
     findutils \
