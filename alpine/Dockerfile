@@ -17,7 +17,9 @@ RUN adduser -S -D -H -u 101 \
 
 # fix UNTRUSTED signature
 # https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper
-RUN apk update --allow-untrusted && apk fix --upgrade --allow-untrusted alpine-keys
+# RUN apk update --allow-untrusted && apk fix --upgrade --allow-untrusted alpine-keys
+# force use 3.19 alpine-keys
+RUN apk add -X https://dl-cdn.alpinelinux.org/alpine/v3.19/main -u alpine-keys
 
 RUN set -eux \
     && apk add --no-cache --virtual .gettext gettext \
