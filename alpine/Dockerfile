@@ -37,6 +37,7 @@ RUN apk add --no-cache --virtual .build-deps-boringssl \
     g++ \
     git \
     go \
+    linux-headers \
     ninja \
     perl
 
