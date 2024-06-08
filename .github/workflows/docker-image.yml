@@ -51,12 +51,14 @@ jobs:
         run: |
           hg clone https://hg.nginx.org/pkg-oss
           cd pkg-oss
-          NGINX_VERSION="$(
+          PKG_OSS_TAG="$(
             hg log -r "sort(branch(default) and tag(), -date)" -T "{tags}\n" |
-              head -n 1 |
-              awk -F "-" '{print $1}'
+              head -n 1
           )"
+          NGINX_VERSION="$(echo "$PKG_OSS_TAG" | awk -F "-" '{print $1}')"
+          RELEASE="$(echo "$PKG_OSS_TAG" | awk -F "-" '{print $2}')"
           echo "NGINX_VERSION=${NGINX_VERSION}" >> $GITHUB_OUTPUT
+          echo "RELEASE=${RELEASE}" >> $GITHUB_OUTPUT
 
       - name: Docker meta
         id: meta
