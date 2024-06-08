@@ -35,6 +35,7 @@ RUN set -eux \
 RUN apk add --no-cache --virtual .build-deps-boringssl \
     cmake \
     g++ \
+    git \
     go \
     ninja \
     perl
