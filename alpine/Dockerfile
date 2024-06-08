@@ -7,24 +7,16 @@ ARG RELEASE
 
 ENV TMP_DIR /tmp/docker-nginx-boringssl
 
-RUN apk add --no-cache --virtual .nginx-deps \
-    alpine-sdk \
-    bash \
-    cmake \
-    curl \
-    findutils \
-    g++ \
-    gcc \
-    go \
-    libc-dev \
-    linux-headers \
-    make \
-    ninja \
-    openssl \
-    openssl-dev \
-    pcre2-dev \
-    perl \
-    zlib-dev
+RUN addgroup -g 101 -S nginx
+RUN adduser -S -D -H -u 101 \
+    -h /var/cache/nginx \
+    -s /sbin/nologin \
+    -G nginx \
+    -g nginx \
+    nginx
+
+# add public key for package signing
+RUN wget -O /etc/apk/keys/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
 
 RUN set -eux \
     && apk add --no-cache --virtual .gettext gettext \
@@ -40,19 +32,17 @@ RUN set -eux \
     && apk del --no-network .gettext \
     && mv /tmp/envsubst /usr/local/bin
 
-RUN apk add --no-cache tzdata
-
-RUN addgroup -g 101 -S nginx
-RUN adduser -S -D -H -u 101 \
-    -h /var/cache/nginx \
-    -s /sbin/nologin \
-    -G nginx \
-    -g nginx \
-    nginx
+RUN apk add --no-cache --virtual .build-deps-boringssl \
+    cmake \
+    g++ \
+    go \
+    ninja \
+    perl
 
 RUN git clone https://github.com/google/boringssl "${TMP_DIR}/boringssl"
 RUN cmake -GNinja -B "${TMP_DIR}/boringssl/build" "${TMP_DIR}/boringssl"
 RUN cmake --build "${TMP_DIR}/boringssl/build"
+RUN apk del --no-network .build-deps-boringssl
 
 # alpine-sdk depends on abuild that depends on curl
 RUN set -eux \
@@ -80,6 +70,18 @@ RUN chown nobody:nobody "${TMP_DIR}"
 RUN chown -R nobody:nobody "${TMP_DIR}"/boringssl/include
 RUN chown -R nobody:nobody "${TMP_DIR}"/pkg-oss-*
 
+RUN apk add --no-cache --virtual .build-deps-nginx \
+    alpine-sdk \
+    bash \
+    findutils \
+    gcc \
+    libc-dev \
+    linux-headers \
+    make \
+    openssl-dev \
+    pcre2-dev \
+    zlib-dev
+
 RUN set -eux \
     && export APK_ARCH="$(cat /etc/apk/arch)" \
     && export BORINGSSL_DIR="${TMP_DIR}/boringssl" \
@@ -94,17 +96,18 @@ RUN set -eux \
             -k \"${TMP_DIR}/.abuild/abuild-key.rsa\" \
             \"${TMP_DIR}/packages/alpine/${APK_ARCH}/APKINDEX.tar.gz\""
 
-RUN cp "${TMP_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys
+RUN apk del --no-network .build-deps-nginx
 
+RUN cp "${TMP_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys
 RUN apk add \
     -X "${TMP_DIR}/packages/alpine" \
     --no-cache "nginx=${NGINX_VERSION}-r${RELEASE}"
 
-RUN apk del --no-network .nginx-deps
-
 RUN [ -n "${TMP_DIR}" ] && rm -rf "${TMP_DIR}"
 RUN [ -n "/etc/apk/keys/abuild-key.rsa.pub" ] && rm -f /etc/apk/keys/abuild-key.rsa.pub
 RUN [ -n "/etc/apk/keys/nginx_signing.rsa.pub" ] && rm -f /etc/apk/keys/nginx_signing.rsa.pub
+
+RUN apk add --no-cache tzdata
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
