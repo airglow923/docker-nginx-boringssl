@@ -11,6 +11,7 @@ RUN apk add --no-cache --virtual .nginx-deps \
     alpine-sdk \
     bash \
     cmake \
+    curl \
     findutils \
     g++ \
     gcc \
