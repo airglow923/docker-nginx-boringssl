@@ -77,7 +77,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          build-args: NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
+          build-args: |
+            NGINX_VERSION=${{ steps.get-nginx-version.outputs.NGINX_VERSION }}
+            RELEASE=${{ steps.get-nginx-version.outputs.RELEASE }}
           context: .
           file: ${{ matrix.dockerfile }}
           tags: ${{ steps.meta.outputs.tags }}
