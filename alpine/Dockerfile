@@ -15,8 +15,9 @@ RUN adduser -S -D -H -u 101 \
     -g nginx \
     nginx
 
-# add public key for package signing
-RUN wget -O /etc/apk/keys/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
+# fix UNTRUSTED signature
+# https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper
+RUN apk update --allow-untrusted && apk fix --upgrade --allow-untrusted alpine-keys
 
 RUN set -eux \
     && apk add --no-cache --virtual .gettext gettext \
