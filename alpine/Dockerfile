@@ -5,7 +5,7 @@ LABEL maintainer="Hyundeok Park <p.hyundeok76@gmail.com>"
 ARG NGINX_VERSION
 ARG RELEASE
 
-ENV TMP_DIR /tmp/docker-nginx-boringssl
+ENV TMP_DIR=/tmp/docker-nginx-boringssl
 
 RUN addgroup -g 101 -S nginx
 RUN adduser -S -D -H -u 101 \
