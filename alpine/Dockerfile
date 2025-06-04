@@ -88,7 +88,7 @@ RUN set -eux \
     && su nobody -s /bin/sh -c " \
         export HOME=\"${TMP_DIR}\" \
         && cd \"${TMP_DIR}\"/pkg-oss-*/alpine \
-        && make base \
+        && make base module-brotli \
         && apk index --allow-untrusted \
             -o \"${TMP_DIR}/packages/alpine/${APK_ARCH}/APKINDEX.tar.gz\" \
             \"${TMP_DIR}/packages/alpine/${APK_ARCH}\"/*.apk \
@@ -99,9 +99,10 @@ RUN set -eux \
 RUN apk del --no-network .build-deps-nginx
 
 RUN cp "${TMP_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys
-RUN apk add \
+RUN apk add --no-cache \
     -X "${TMP_DIR}/packages/alpine" \
-    --no-cache "nginx=${NGINX_VERSION}-r${RELEASE}"
+    "nginx=${NGINX_VERSION}-r${RELEASE}" \
+    "nginx-module-brotli=${NGINX_VERSION}-1.0.0-r${RELEASE}"
 
 RUN [ -n "${TMP_DIR}" ] && rm -rf "${TMP_DIR}"
 RUN [ -n "/etc/apk/keys/abuild-key.rsa.pub" ] && rm -f /etc/apk/keys/abuild-key.rsa.pub
