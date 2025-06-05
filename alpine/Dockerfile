@@ -46,6 +46,7 @@ RUN apk del --no-network .build-deps-boringssl
 RUN apk add --no-cache --virtual .build-deps-nginx \
     alpine-sdk \
     bash \
+    brotli-dev \
     curl \
     findutils \
     gcc \
