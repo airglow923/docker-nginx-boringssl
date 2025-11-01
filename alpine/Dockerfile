@@ -65,7 +65,7 @@ RUN set -eux \
     && PKG_OSS_TARBALL="pkg-oss-${NGINX_VERSION}-${RELEASE}.tar.gz" \
     && cd "${TMP_DIR}" \
     && curl -sSf --tlsv1.2 --proto '=https' \
-        "https://hg.nginx.org/pkg-oss/archive/${NGINX_VERSION}-${RELEASE}.tar.gz" \
+        "https://github.com/nginx/pkg-oss/archive/${NGINX_VERSION}-${RELEASE}.tar.gz" \
         -o "${PKG_OSS_TARBALL}" \
     && tar -xf "${PKG_OSS_TARBALL}"
 
