@@ -4,11 +4,13 @@ LABEL maintainer="Hyundeok Park <p.hyundeok76@gmail.com>"
 
 ARG NGINX_VERSION
 ARG RELEASE
+ARG UID=101
+ARG GID=101
 
 ENV TMP_DIR=/tmp/docker-nginx-boringssl
 
-RUN addgroup -g 101 -S nginx
-RUN adduser -S -D -H -u 101 \
+RUN addgroup -g $GID -S nginx
+RUN adduser -S -D -H -u $UID \
     -h /var/cache/nginx \
     -s /sbin/nologin \
     -G nginx \
@@ -107,6 +109,11 @@ RUN apk add --no-cache \
     -X "${TMP_DIR}/packages/alpine" \
     "nginx=${NGINX_VERSION}-r${RELEASE}" \
     "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}"
+
+RUN chown -R $UID:0 /var/cache/nginx \
+    && chmod -R g+w /var/cache/nginx \
+    && chown -R $UID:0 /etc/nginx \
+    && chmod -R g+w /etc/nginx
 
 RUN [ -n "${TMP_DIR}" ] && rm -rf "${TMP_DIR}"
 RUN [ -n "/etc/apk/keys/abuild-key.rsa.pub" ] && rm -f /etc/apk/keys/abuild-key.rsa.pub
