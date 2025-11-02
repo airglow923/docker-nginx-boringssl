@@ -59,9 +59,6 @@ RUN apk add --no-cache --virtual .build-deps-nginx \
     pcre2-dev \
     zlib-dev
 
-RUN apk add --no-cache --virtual .deps-nginx \
-    nginx-mod-http-lua
-
 # alpine-sdk depends on abuild that depends on curl
 RUN set -eux \
     && PKG_OSS_TARBALL="pkg-oss-${NGINX_VERSION}-${RELEASE}.tar.gz" \
@@ -108,7 +105,8 @@ RUN cp "${TMP_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys
 RUN apk add --no-cache \
     -X "${TMP_DIR}/packages/alpine" \
     "nginx=${NGINX_VERSION}-r${RELEASE}" \
-    "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}"
+    "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}" \
+    "nginx-module-lua=${NGINX_VERSION}.1.0.0-r${RELEASE}"
 
 RUN mkdir -p /var/cache/nginx \
     && chown -R $UID:0 /var/cache/nginx \
