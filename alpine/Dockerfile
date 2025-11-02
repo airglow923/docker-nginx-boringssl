@@ -110,7 +110,8 @@ RUN apk add --no-cache \
     "nginx=${NGINX_VERSION}-r${RELEASE}" \
     "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}"
 
-RUN chown -R $UID:0 /var/cache/nginx \
+RUN mkdir -p /var/cache/nginx \
+    && chown -R $UID:0 /var/cache/nginx \
     && chmod -R g+w /var/cache/nginx \
     && chown -R $UID:0 /etc/nginx \
     && chmod -R g+w /etc/nginx
