@@ -8,4 +8,4 @@ COPY init-ngxblocker.sh /tmp
 # curl: required by update-ngxblocker
 # dig: optional dependency of scripts.d
 RUN apk add --no-cache curl bind-tools
-RUN /tmp/init-ngxblocker.sh
+RUN su nginx -s /bin/sh -c "/tmp/init-ngxblocker.sh"
