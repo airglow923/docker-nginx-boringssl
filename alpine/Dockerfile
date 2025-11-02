@@ -91,6 +91,7 @@ RUN set -eux \
     && su nobody -s /bin/sh -c " \
         export HOME=\"${TMP_DIR}\" \
         && cd \"${TMP_DIR}\"/pkg-oss-*/alpine \
+        && make base module-lua\
         && make base module-brotli \
         && apk index --allow-untrusted \
             -o \"${TMP_DIR}/packages/alpine/${APK_ARCH}/APKINDEX.tar.gz\" \
@@ -105,8 +106,8 @@ RUN cp "${TMP_DIR}/.abuild/abuild-key.rsa.pub" /etc/apk/keys
 RUN apk add --no-cache \
     -X "${TMP_DIR}/packages/alpine" \
     "nginx=${NGINX_VERSION}-r${RELEASE}" \
-    "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}" \
-    "nginx-module-lua=${NGINX_VERSION}.1.0.0-r${RELEASE}"
+    "nginx-module-lua=${NGINX_VERSION}.1.0.0-r${RELEASE}" \
+    "nginx-module-brotli=${NGINX_VERSION}.1.0.0-r${RELEASE}"
 
 RUN mkdir -p /var/cache/nginx \
     && chown -R $UID:0 /var/cache/nginx \
