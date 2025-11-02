@@ -91,6 +91,7 @@ RUN set -eux \
     && su nobody -s /bin/sh -c " \
         export HOME=\"${TMP_DIR}\" \
         && cd \"${TMP_DIR}\"/pkg-oss-*/alpine \
+        && make base module-ndk\
         && make base module-lua\
         && make base module-brotli \
         && apk index --allow-untrusted \
